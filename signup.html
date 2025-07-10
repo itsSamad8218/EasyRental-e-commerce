@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sign Up – EasyRental</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<style>
+  body {
+    background: #000;
+  }
+
+
+
+    /* Navbar hover effects */
+    .nav-link {
+    color: #ffffff !important;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    position: relative;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+  }
+  
+  .nav-link:hover {
+    color: #00d4aa !important;
+    transform: translateY(-2px);
+  }
+  
+  /* Navbar brand gradient effect */
+  .navbar-brand {
+    font-size: 60px;
+    font-weight: 700;
+    background: linear-gradient(45deg, #00d4aa, #00b4d8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin: 0;
+  }
+  
+  /* Navbar styling */
+  .navbar {
+    background: black !important;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+
+
+  .login-navbar {
+    background: black !important;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  </style>
+<body>
+
+
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background: black !important; backdrop-filter: blur(10px); box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); padding: 1rem;">
+    <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
+      <a class="navbar-brand" href="#" style="font-size: 50px; font-weight: 700; background: linear-gradient(45deg, #00d4aa, #00b4d8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin: 0;">
+        <i class="fas fa-home me-2"></i>EasyRental
+      </a>
+      <div class="navbar-nav" style="display: flex; gap: 2rem; list-style: none; margin: 0; padding: 0; align-items: center;">
+        <a class="nav-link" href="index.html">
+          <i class="fas fa-home me-1"></i>Home
+        </a>
+      </div>
+    </div>
+  </nav>
+
+    </ul>
+  </nav> 
+  <div style="max-width: 400px; margin: 40px auto; background: #333; padding: 2rem; border-radius: 12px;">
+    <h2 style="color: aquamarine; text-align: center;">Sign Up</h2>
+    <form id="signupForm">
+      <input type="text" placeholder="First Name" name="firstName" required style="width:100%;margin-bottom:1rem;padding:0.5rem;">
+      <input type="text" placeholder="Last Name" name="lastName" required style="width:100%;margin-bottom:1rem;padding:0.5rem;">
+      <input type="email" placeholder="Email ID" name="email" required style="width:100%;margin-bottom:1rem;padding:0.5rem;">
+      <input type="password" placeholder="Password" name="password" required style="width:100%;margin-bottom:1rem;padding:0.5rem;">
+      <button type="submit" style="width:100%;padding:0.7rem;background:aquamarine;color:black;font-weight:bold;border:none;border-radius:5px;">Submit</button>
+    </form>
+  </div>
+  <script>
+    const signupForm = document.getElementById('signupForm');
+    if (signupForm) {
+      signupForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        alert('Account created successfully!');
+        window.location.href = 'index.html';
+      });
+    }
+  </script>
+</body>
+</html>

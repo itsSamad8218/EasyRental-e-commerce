@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EasyRental - Property Customization Platform</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Using OpenStreetMap as a free alternative to Google Maps -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="script.js" defer></script>
+    <!-- Font Awesome for professional icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Bootstrap for responsive design -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #00d4aa;
+            --secondary-color: #333;
+            --accent-color: #ff6b35;
+            --text-light: #ffffff;
+            --text-dark: #333333;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --border-radius: 8px;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: rgba(0, 0, 0, 0.9) !important;
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow);
+        }
+
+        .navbar-brand {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--primary-color), #00b4d8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-link {
+            color: var(--text-light) !important;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link:hover {
+            color: var(--primary-color) !important;
+            transform: translateY(-2px);
+        }
+
+        .hero-section {
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3') center/cover;
+            padding: 100px 0;
+            text-align: center;
+            color: var(--text-light);
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+        }
+
+        .customize-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 2rem;
+            margin: 2rem auto;
+            max-width: 800px;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .form-control {
+            border: 2px solid #e9ecef;
+            border-radius: var(--border-radius);
+            padding: 0.75rem;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(0, 212, 170, 0.25);
+            outline: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary-color), #00b4d8);
+            border: none;
+            border-radius: var(--border-radius);
+            padding: 0.75rem 2rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 212, 170, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--secondary-color);
+            border: none;
+            border-radius: var(--border-radius);
+            padding: 0.5rem 1rem;
+            color: var(--text-light);
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: var(--accent-color);
+            transform: translateY(-1px);
+        }
+
+        #map {
+            height: 400px;
+            width: 100%;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 1rem;
+        }
+
+        .location-search {
+            margin-bottom: 1rem;
+        }
+
+        .search-input {
+            border: 2px solid #e9ecef;
+            border-radius: var(--border-radius);
+            padding: 0.75rem;
+            width: 100%;
+            margin-bottom: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(0, 212, 170, 0.25);
+        }
+
+        .property-preview {
+            background: #f8f9fa;
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            margin-top: 1rem;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .alert {
+            border-radius: var(--border-radius);
+            border: none;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .alert-success {
+            background: linear-gradient(45deg, #28a745, #20c997);
+            color: white;
+        }
+
+        .alert-error {
+            background: linear-gradient(45deg, #dc3545, #fd7e14);
+            color: white;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin: 1rem 0;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .image-slider {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .customize-sliders {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .image-costomize, .parking-costomize {
+            position: relative;
+            background: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .image-costomize img, .parking-costomize img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+
+        .slider-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slider-arrow:hover {
+            background: var(--primary-color);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        #prvBtn, #prvBtn1, #prvBtn2 {
+            left: 10px;
+        }
+
+        #pstBtn, #pstBtn1, #pstBtn2 {
+            right: 10px;
+        }
+
+        .outer-costomize {
+            position: relative;
+            background: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            margin: 2rem auto;
+            max-width: 800px ;
+            display: block;
+        }
+
+        .outer-costomize img {
+            width: 95%;
+            height: 400px;
+            object-fit: cover;
+            display: block;
+        }
+
+        @media (max-width: 768px ) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .customize-container {
+                align-items: center;
+                margin: 1rem;
+                padding: 1rem;
+            }
+            
+            .customize-sliders {
+                grid-template-columns: 1fr;
+                align-items: center;
+            }
+        }
+
+        .footer {
+            background: var(--secondary-color);
+            color: var(--text-light);
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        .social-links {
+            margin-top: 1rem;
+        }
+
+        .social-links a {
+            color: var(--text-light);
+            margin: 0 0.5rem;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+    </style>
+</head> 
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-home me-2"></i>EasyRental
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">
+                            <i class="fas fa-home me-1"></i>Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="signup.html">
+                            <i class="fas fa-user-plus me-1"></i>Signup
+                        </a>
+                    </li>
+                    
+                
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <h1 class="hero-title">EXPLORE THE ART OF INTERIOR ELEGANCE</h1>
+            <h2 class="hero-subtitle" style="font-size: 35px;">Discover the perfect blend of comfort and class</h2>
+        </div>
+    </section>
+
+    <!-- Image Sliders -->
+    <div class="container mt-5">
+        <div class="customize-sliders">
+            <section class="image-costomize">
+                <button id="prvBtn" class="slider-arrow">&#8592;</button>
+                <img id="sliderImgage" src="image2/img1.jpg" alt="Interior Design">
+                <button id="pstBtn" class="slider-arrow">&#8594;</button>
+            </section>
+            <section class="parking-costomize">
+                <button id="prvBtn1" class="slider-arrow">&#8592;</button>
+                <img id="sliderImgage1" src="image2/img2.jpg" alt="Parking Area">
+                <button id="pstBtn1" class="slider-arrow">&#8594;</button>
+            </section>
+        </div>
+        
+        <section class="outer-costomize">
+            <button id="prvBtn2" class="slider-arrow">&#8592;</button>
+            <img id="sliderImgage2" src="image3/img3.webp" alt="Exterior View">
+            <button id="pstBtn2" class="slider-arrow">&#8594;</button>
+        </section>
+    </div>
+
+    <!-- Property Customization Form -->
+    <div class="container">
+        <div class="customize-container">
+            <div class="text-center mb-4">
+                <h2 class="display-4 fw-bold text-primary">
+                    <i class="fas fa-cogs me-2"></i>Customize Your Property
+                </h2>
+                <p class="text-muted">Create your dream property with our advanced customization tools</p>
+            </div>
+
+            <!-- Alert Messages -->
+            <div id="alertContainer"></div>
+
+            <form id="customizeForm" class="needs-validation" novalidate>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="propertyName" class="form-label">
+                                <i class="fas fa-building me-1"></i>Property Type
+                            </label>
+                            <input type="text" id="propertyName" class="form-control" required 
+                                   placeholder="e.g., Apartment, Villa, Office Space">
+                            <div class="invalid-feedback">Please enter a property type.</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="propertyPrice" class="form-label">
+                                <i class="fas fa-dollar-sign me-1"></i>Price (USD)
+                            </label>
+                            <input type="number" id="propertyPrice" class="form-control" required 
+                                   placeholder="Enter price in USD" min="0">
+                            <div class="invalid-feedback">Please enter a valid price.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="propertyDescription" class="form-label">
+                        <i class="fas fa-align-left me-1"></i>Description
+                    </label>
+                    <textarea id="propertyDescription" class="form-control" rows="4" required 
+                              placeholder="Describe your property features, amenities, and unique selling points..."></textarea>
+                    <div class="invalid-feedback">Please provide a description.</div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="date" class="form-label">
+                                <i class="fas fa-calendar me-1"></i>Booking Date
+                            </label>
+                            <input type="date" id="date" class="form-control" required>
+                            <div class="invalid-feedback">Please select a booking date.</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="propertyType" class="form-label">
+                                <i class="fas fa-tag me-1"></i>Property Category
+                            </label>
+                            <select id="propertyType" class="form-control" required>
+                                <option value="">Select Category</option>
+                                <option value="residential">Residential</option>
+                                <option value="commercial">Commercial</option>
+                                <option value="industrial">Industrial</option>
+                                <option value="land">Land</option>
+                            </select>
+                            <div class="invalid-feedback">Please select a property category.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="location" class="form-label">
+                        <i class="fas fa-map-marker-alt me-1"></i>Location
+                    </label>
+                    <div class="location-search">
+                        <input type="text" id="locationSearch" class="search-input" 
+                               placeholder="Search for a location (e.g., New York, NY)">
+                        <button type="button" id="searchBtn" class="btn btn-secondary">
+                            <i class="fas fa-search me-1"></i>Search Location
+                        </button>
+                    </div>
+                    <div id="map"></div>
+                    <input type="hidden" id="latitude" name="latitude">
+                    <input type="hidden" id="longitude" name="longitude">
+                    <input type="hidden" id="address" name="address">
+                </div>
+
+                <!-- Property Preview -->
+                <div id="propertyPreview" class="property-preview" style="display: none;">
+                    <h5><i class="fas fa-eye me-1"></i>Property Preview</h5>
+                    <div id="previewContent"></div>
+                </div>
+
+                <!-- Loading Spinner -->
+                <div id="loadingSpinner" class="loading-spinner">
+                    <div class="spinner"></div>
+                    <p class="mt-2">Processing your request...</p>
+                </div>
+
+                <div class="text-center mt-4">
+                    <button id="submit" type="submit" class="btn btn-primary btn-lg">
+                        <i class="fas fa-paper-plane me-2"></i>Submit Property
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="feature-card text-center">
+                    <div class="feature-icon">
+                        <i class="fas fa-map-marked-alt"></i>
+                    </div>
+                    <h5>Interactive Maps</h5>
+                    <p>Choose your perfect location with our advanced mapping system</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card text-center">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h5>Secure Platform</h5>
+                    <p>Your data is protected with enterprise-grade security measures</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card text-center">
+                    <div class="feature-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h5>Mobile Responsive</h5>
+                    <p>Access our platform seamlessly across all devices</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 EasyRental. All rights reserved.</p>
+            <div class="social-links">
+                <a href="https://github.com/itsSamad8218" target="_blank"><i class="fab fa-github"></i></a>
+                <a href="mailto:abdulkhan14296@gmail.com"><i class="fas fa-envelope"></i></a>
+                <a href="https://www.linkedin.com/in/abdul-samad-khan9012" target="_blank"><i class="fab fa-linkedin"></i></a>
+                <a href="tel:+918218864445"><i class="fas fa-phone"></i>+91 8218864445</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Image Slider Functionality
+        const images = [
+            'image2/img2.jpg',
+            'image2/img3.jpg',
+            'image2/img4.jpg',
+            'image2/img5.jpg',
+            "image2/img6.jpg",
+            'image2/img7.jpg',
+        ];
+        let currentIndex = 0;
+
+        const sliderImage = document.getElementById('sliderImgage');
+        const prvBtn = document.getElementById('prvBtn');
+        const pstBtn = document.getElementById('pstBtn');
+
+        if (sliderImage && prvBtn && pstBtn) {
+            prvBtn.onclick = function() {
+                currentIndex = (currentIndex - 1 + images.length) % images.length;
+                sliderImage.src = images[currentIndex];
+            };
+            pstBtn.onclick = function() {
+                currentIndex = (currentIndex + 1) % images.length;
+                sliderImage.src = images[currentIndex];
+            };
+        }
+
+        const parkingImages = [
+            "image2/img9.jpg",
+            "image2/img10.jpg", 
+            "image2/img11.jpeg",
+            "image2/img12.jpg",
+            "image2/img13.jpg",
+            "image2/img14.jpg",
+        ];
+        let currentIndex1 = 0;
+
+        const sliderImage1 = document.getElementById('sliderImgage1');
+        const prvBtn1 = document.getElementById('prvBtn1');
+        const pstBtn1 = document.getElementById('pstBtn1');
+
+        if (sliderImage1 && prvBtn1 && pstBtn1) {
+            prvBtn1.onclick = function() {
+                currentIndex1 = (currentIndex1 - 1 + parkingImages.length) % parkingImages.length;
+                sliderImage1.src = parkingImages[currentIndex1];
+            };
+            pstBtn1.onclick = function() {
+                currentIndex1 = (currentIndex1 + 1) % parkingImages.length;
+                sliderImage1.src = parkingImages[currentIndex1];
+            };
+        }
+
+        const outerImages = [
+            "image3/img1.jpg",
+            "image3/img2.jpg",
+            "image3/img3.webp",
+            "image3/img4.jpg",
+            "image3/img5.jpg",
+            "image3/img6.jpg",
+            "image3/img7.jpg",
+        ];
+        let currentIndex2 = 0;
+
+        const sliderImage2 = document.getElementById('sliderImgage2');
+        const prvBtn2 = document.getElementById('prvBtn2');
+        const pstBtn2 = document.getElementById('pstBtn2');
+
+        if (sliderImage2 && prvBtn2 && pstBtn2) {   
+            prvBtn2.onclick = function() {
+                currentIndex2 = (currentIndex2 - 1 + outerImages.length) % outerImages.length;
+                sliderImage2.src = outerImages[currentIndex2];
+            };
+            pstBtn2.onclick = function() {
+                currentIndex2 = (currentIndex2 + 1) % outerImages.length;   
+                sliderImage2.src = outerImages[currentIndex2];
+            };
+        }
+
+        // Leaflet (OpenStreetMap) functionality
+        let map, marker;
+        let selectedLocation = null;
+
+        function initMap() {
+            // Initialize map centered on India
+            map = L.map('map').setView([20.5937, 78.9629], 5);
+            
+            // Add OpenStreetMap tiles
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+
+            // Add click listener to map
+            map.on('click', function(event) {
+                placeMarker(event.latlng);
+            });
+
+            // Search button functionality
+            document.getElementById('searchBtn').addEventListener('click', searchLocation);
+        }
+
+        function searchLocation() {
+         const address = document.getElementById('locationSearch').value;
+         if (address) {
+         showLoading(true);
+                // Using Nominatim for geocoding (free OpenStreetMap service)
+         fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`)
+        .then(response => response.json())
+         .then(data => {
+                        showLoading(false);
+                        if (data.length > 0) {
+                            const location = data[0];
+                            const lat = parseFloat(location.lat);
+                            const lon = parseFloat(location.lon);
+                            
+                            map.setView([lat, lon], 15);
+                            placeMarker({ lat: lat, lng: lon });
+                            
+                            // Update search field with found address
+                            document.getElementById('locationSearch').value = location.display_name;
+                            showAlert('Location found successfully!', 'success');
+                        } else {
+                            showAlert('Location not found. Please try a different search term.', 'error');
+                        }
+                    })
+                    .catch(error => {
+                        showLoading(false);
+                        console.error('Error searching location:', error);
+                        showAlert('Error searching location. Please try again.', 'error');
+                    });
+            }
+        }
+
+        function placeMarker(location) {
+            if (marker) {
+                map.removeLayer(marker);
+            }
+            
+            marker = L.marker([location.lat, location.lng], {
+                draggable: true
+            }).addTo(map);
+
+            // Update hidden fields
+            document.getElementById('latitude').value = location.lat;
+            document.getElementById('longitude').value = location.lng;
+            document.getElementById('address').value = document.getElementById('locationSearch').value || `Lat: ${location.lat}, Lng: ${location.lng}`;
+            selectedLocation = location;
+
+            // Add drag end listener to update coordinates
+            marker.on('dragend', function(event) {
+                const newLocation = event.target.getLatLng();
+                document.getElementById('latitude').value = newLocation.lat;
+                document.getElementById('longitude').value = newLocation.lng;
+                selectedLocation = newLocation;
+            });
+
+            updatePropertyPreview();
+        }
+
+        function showAlert(message, type) {
+            const alertContainer = document.getElementById('alertContainer');
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type === 'success' ? 'success' : 'error'}`;
+            alertDiv.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-triangle'} me-2"></i>
+                ${message}
+            `;
+            alertContainer.appendChild(alertDiv);
+            
+            setTimeout(() => {
+                alertDiv.remove();
+            }, 5000);
+        }
+
+        function showLoading(show) {
+            const spinner = document.getElementById('loadingSpinner');
+            spinner.style.display = show ? 'block' : 'none';
+        }
+
+        function updatePropertyPreview() {
+            const propertyName = document.getElementById('propertyName').value;
+            const propertyDescription = document.getElementById('propertyDescription').value;
+            const propertyPrice = document.getElementById('propertyPrice').value;
+            const propertyType = document.getElementById('propertyType').value;
+            const date = document.getElementById('date').value;
+            const address = document.getElementById('address').value;
+
+            if (propertyName && propertyDescription && propertyPrice && propertyType && date && address) {
+                const preview = document.getElementById('propertyPreview');
+                const content = document.getElementById('previewContent');
+                
+                content.innerHTML = `
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Type:</strong> ${propertyName}</p>
+                            <p><strong>Category:</strong> ${propertyType}</p>
+                            <p><strong>Price:</strong> $${propertyPrice}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Date:</strong> ${date}</p>
+                            <p><strong>Location:</strong> ${address}</p>
+                            <p><strong>Coordinates:</strong> ${selectedLocation ? `${selectedLocation.lat.toFixed(6)}, ${selectedLocation.lng.toFixed(6)}` : 'Not set'}</p>
+                        </div>
+                    </div>
+                    <p><strong>Description:</strong> ${propertyDescription}</p>
+                `;
+                
+                preview.style.display = 'block';
+            }
+        }
+
+        // Form validation and submission
+        document.getElementById('customizeForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const form = this;
+            if (!form.checkValidity()) {
+                form.classList.add('was-validated');
+                showAlert('Please fill in all required fields correctly.', 'error');
+                return;
+            }
+            
+            // Validate form
+            const propertyName = document.getElementById('propertyName').value;
+            const propertyDescription = document.getElementById('propertyDescription').value;
+            const propertyPrice = document.getElementById('propertyPrice').value;
+            const propertyType = document.getElementById('propertyType').value;
+            const date = document.getElementById('date').value;
+            
+            if (!propertyName || !propertyDescription || !propertyPrice || !propertyType || !date) {
+                showAlert('Please fill in all required fields!', 'error');
+                return;
+            }
+            
+            if (!selectedLocation) {
+                showAlert('Please select a location on the map!', 'error');
+                return;
+            }
+
+            // Show loading
+            showLoading(true);
+
+            // Simulate API call
+            setTimeout(() => {
+                showLoading(false);
+                
+                // Save to localStorage for demo purposes
+                const propertyData = {
+                    id: Date.now(),
+                    name: propertyName,
+                    description: propertyDescription,
+                    price: propertyPrice,
+                    type: propertyType,
+                    date: date,
+                    location: {
+                        lat: selectedLocation.lat,
+                        lng: selectedLocation.lng,
+                        address: document.getElementById('address').value
+                    },
+                    createdAt: new Date().toISOString()
+                };
+
+                // Get existing properties or initialize empty array
+                const existingProperties = JSON.parse(localStorage.getItem('properties') || '[]');
+                existingProperties.push(propertyData);
+                localStorage.setItem('properties', JSON.stringify(existingProperties));
+
+                // Show success message and redirect
+                alert('Property submitted successfully! Here are the Best Results!', 'success');
+                
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 2000);
+            }, 1500);
+        });
+
+        // Real-time preview updates
+        ['propertyName', 'propertyDescription', 'propertyPrice', 'propertyType', 'date'].forEach(id => {
+            document.getElementById(id).addEventListener('input', updatePropertyPreview);
+        });
+
+        // Initialize map when page loads
+        window.onload = initMap;
+    </script>
+    
+</body>
+</html>

@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EasyRental – Property Rental Platform</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Font Awesome for professional icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<style>
+  #propertyListingForm {
+    display: none;
+  }
+
+    /* Navbar hover effects */
+  .nav-link {
+    color: #ffffff !important;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    position: relative;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+  }
+  
+  .nav-link:hover {
+    color: #00d4aa !important;
+    transform: translateY(-2px);
+  }
+  
+  /* Navbar brand gradient effect */
+  .navbar-brand {
+    font-size: 60px;
+    font-weight: 700;
+    background: linear-gradient(45deg, #00d4aa, #00b4d8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin: 0;
+  }
+  
+  /* Navbar styling */
+  .navbar {
+    background: black !important;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+</style>
+ 
+
+
+<body>
+     
+
+       <nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background: black !important; backdrop-filter: blur(10px); box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); padding: 1rem;">
+      <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
+        <a class="navbar-brand" href="#" style="font-size: 50px; font-weight: 700; background: linear-gradient(45deg, #00d4aa, #00b4d8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin: 0;">
+          <i class="fas fa-home me-2"></i>EasyRental
+        </a>
+        <div class="navbar-nav" style="display: flex; gap: 2rem; list-style: none; margin: 0; padding: 0; align-items: center;">
+          <a class="nav-link" href="index.html">
+            <i class="fas fa-home me-1"></i>Home
+          </a>
+          <a class="nav-link" href="signup.html">
+            <i class="fas fa-user-plus me-1"></i>Signup
+          </a>
+          <a class="nav-link" href="#" id="myBtn">
+            <i class="fas fa-sign-in-alt me-1"></i>Login
+          </a>
+          <a class="nav-link" href="#" id="showListProperty">
+            <i class="fas fa-list-ul me-1"></i>LIST YOUR PROPERTY
+          </a>
+        </div>
+      </div>
+    </nav>
+
+  <div class="navbar-gap"></div>
+     
+    
+  
+  <header style="font-size: 60px; color: aliceblue; background-color: black;text-align: center;font-style: italic;">WHERE RENTING BECOME EFFORTLESS</header>
+
+
+
+  <section class="hero">
+    <h1 style="font-size: 60px; text-align: center;font-style: italic;">Find your next home, hassle-free.</h1>
+    <div class="hero-images">
+      <img src="images/image3.jpg" alt="Home Banner" class="hero-img">
+      <img src="images/image1.jpg" alt="Home Banner" class="hero-img">
+    </div>
+    <h2 style="font-size: 40px; color: black;font-style: italic; text-align: center;">Explore our wide range of properties for rent.</h2>
+  </section>
+
+  <section class="property-listing-form" id="propertyListingForm">
+    <h2>List Your Property</h2>
+    <form id="propertyForm">
+      <label for="title">Title</label>
+      <input type="text" id="title" required>
+
+      <label for="description">Description</label>
+      <textarea id="description" required></textarea>
+
+      <label for="rent">Rent</label>
+      <input type="number" id="rent" required>
+
+      <label for="location">Location</label>
+      <input type="text" id="location" required>
+
+      <label for="images">Upload Images</label>
+      <input type="file" id="images" multiple required>
+
+      <label for="features">Features</label>
+      <select id="features" multiple required>
+        <option value="WiFi">WiFi</option>
+        <option value="AC">AC</option>
+        <option value="Furnished">Furnished</option>
+        <option value="Parking">Parking</option>
+        <option value="Pet Friendly">Pet Friendly</option>
+        <option value="All of the above">All of the above</option>
+      </select>
+
+      <button type="submit" style="background-color: #333">List Property</button>
+    </form>
+  </section>
+
+  <section class="property-grid">
+    <!-- Sample property card -->
+    <div class="property-card">
+      <img src=" images.jpg" alt="Property Image">
+      <h2>4BHK LUXURY </h2>
+      <p>Premium property Spacious Bedroom with large windows</p>
+      <p>Open Concept Living and Dining Area</p>
+      <p>Dubai:Global city</p>
+      <p>Rent: $50000</p>
+      <button class="viewDetails">View Details</button>
+    </div>
+    <div class="property-card">
+      <img src="images/image2.jpg" alt="Property Image">
+      <h2>MANSSION</h2>
+      <p>Luxury manssion in the city center</p>
+        <p>Big rooms with modern amenities and a large swimming pool </p>
+
+      <p>USA:NewYork</p>
+      <p>Rent: $30000</p>
+      <button class="viewDetails">View Details</button>
+      </div>
+      <div class="property-card">
+      <img src="images/image5.jpeg" alt="Property Image">    
+        <h2>2BHK MODERN HOUSE</h2>
+        <p>Modern Interior and fully Furnished </p>
+        <p>Located in a peaceful neighborhood</p>
+        <p>UK:London</p>
+        <p>Rent: $25000</p>
+        <button class="viewDetails">View Details</button>
+
+  </section>
+
+<!-- Slider Section -->
+ 
+ <h4 style="font-size: 50px; text-align: center; font-style: italic;">FIND THE MOST SUITABLE ACCORDING TO YOU</h4>
+<section class="image-slider" src="images/image1.jpg" style="max-width:600px; height:400px;margin:40px auto;text-align:center;">
+  <button id="prevBtn" style="font-size:2rem;padding:0.5rem 1rem;">&#8592;</button>
+  <img id="sliderImg" src="images/image1.jpg" alt="Slider Image" style="width:500px;height:350px;object-fit:cover;border-radius:10px;margin:0 20px;">
+  <button id="nextBtn" style="font-size:2rem;padding:0.5rem 1rem;">&#8594;</button>
+  
+</section>
+
+
+
+
+
+
+  <section class="property-details">
+    <img src="images/image7.jpg" alt="Full Property">
+    <h2>FOR SALE</h2>
+    <p>This property is ideal for families seeking a modern lifestyle in a peacefull environment</p>
+    <p>  3 bedrooms, 2 bathrooms, spacious living area, and a beautiful garden. </p>
+    <p>Features: WiFi, AC, Furnished, Parking, Pet Friendly</p>
+
+    <p>INDIA:Chennai</p>
+    <p>Price: $650000</p>
+    <button id="contactOwner" style="background-color: #333;">Contact Owner</button>
+  </section>
+
+  <section class="review-section">
+    <h2>REVIEW</h2>
+    <ul>
+      <li><p style="color: blueviolet; font-size: 20px; ">HARRY ⭐⭐⭐⭐⭐(5/5)  </p><p>I had an excellent exprience to explore property: 5/5</p></li>
+  <li><p style="color: blueviolet; font-size: 20px; ">JOHN ⭐⭐⭐⭐(4/5)  </p><p>Great service and easy to use platform: 4/5</p></li>
+      <li><p style="color: blueviolet; font-size: 20px; ">SARA ⭐⭐⭐⭐⭐(5/5)  </p><p>Found my dream home quickly and easily: 5/5</p></li>
+      <li><p style="color: blueviolet; font-size: 20px; ">MIKE ⭐⭐⭐(3/5)  </p><p>Good selection of properties, but could improve search filters: 3/5</p></li>
+    </ul>
+  </section> 
+        <footer class="footer">
+    <p>&copy; 2025 EasyRental.</p>
+    <p>  Contact us: +91 8218864445 </p>  
+    <p>  Email: <a href="mailto:abdulkhan14296@gmail.com">abdulkhan14296@gmail.com</a></p>
+    <p>  GitHub: <a href="https://github.com/itsSamad8218" target="_blank">https://github.com/itsSamad8218</a></p>
+    <p>  LinkedIn: <a href="https://www.linkedin.com/in/abdul-samad-khan9012" target="_blank">https://www.linkedin.com/in/abdul-samad-khan9012</a></p>
+</footer>
+
+
+
+  <!-- Modal -->
+  <div id="myModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Login</h2>
+      <form id="loginForm">
+        <input type="text" placeholder="username" required>
+        <input type="text" placeholder="Email" required>
+        <input type="password" placeholder="Password" required>
+        <button type="submit">Login</button>
+        <p><a href="#" id="forgotPassword" style="color: #00d4aa; text-decoration: none; font-size: 14px;">Forgot Password?</a></p>
+        <p>Don't have an account? <a href="signup.html" class="modal-signup-link">Sign Up</a></p>
+        <!-- <p><a href="#" id="forgotPassword" style="color: #00d4aa; text-decoration: none; font-size: 14px;">Forgot Password?</a></p> -->
+      </form>
+    </div>
+  </div>
+ 
+  <!-- Forgot Password Modal -->
+ <div id="forgotPasswordModal" class="modal">
+    <div class="modal-content">
+      <span class="close-forgot">&times;</span>
+      <h2>Reset Password</h2>
+      <form id="forgotPasswordForm">
+        <input type="email" placeholder="Enter your email address" required>
+        <button type="submit" style="background-color: #00d4aa; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">Send Reset Link</button>
+        <p><a href="#" id="backToLogin" style="color: #00d4aa; text-decoration: none; font-size: 14px;">Back to Login</a></p>
+      </form>
+    </div>
+  </div> 
+
+
+
+
+
+  </div>
+
+  <script src="script.js"></script>
+<script>
+  document.getElementById('showListProperty').addEventListener('click', function(e) {
+    e.preventDefault();
+    document.getElementById('propertyListingForm').style.display = 'block';
+    document.getElementById('propertyListingForm').scrollIntoView({ behavior: 'smooth' });
+  });
+
+  // Forgot Password Functionality
+  document.getElementById('forgotPassword').addEventListener('click', function(e) {
+    e.preventDefault();
+    document.getElementById('myModal').style.display = 'none';
+    document.getElementById('forgotPasswordModal').style.display = 'block';
+  });
+
+  document.getElementById('backToLogin').addEventListener('click', function(e) {
+    e.preventDefault();
+    document.getElementById('forgotPasswordModal').style.display = 'none';
+    document.getElementById('myModal').style.display = 'block';
+  });
+
+  // Close forgot password modal
+  document.querySelector('.close-forgot').addEventListener('click', function() {
+    document.getElementById('forgotPasswordModal').style.display = 'none';
+  });
+
+  // Handle forgot password form submission
+  document.getElementById('forgotPasswordForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const email = this.querySelector('input[type="email"]').value;
+    
+    if (email) {
+      // Simulate sending reset email
+      alert('Password reset link has been sent to ' + email + '\nPlease check your email inbox.');
+      
+      // Reset form and close modal
+      this.reset();
+      document.getElementById('forgotPasswordModal').style.display = 'none';
+      document.getElementById('myModal').style.display = 'block';
+    }
+  });
+
+  // Close modal when clicking outside
+  window.addEventListener('click', function(event) {
+    const forgotModal = document.getElementById('forgotPasswordModal');
+    const loginModal = document.getElementById('myModal');
+    
+    if (event.target === forgotModal) {
+      forgotModal.style.display = 'none';
+    }
+    if (event.target === loginModal) {
+      loginModal.style.display = 'none';
+    }
+  });
+</script>
+  
+
+
+</body>
+</html>
