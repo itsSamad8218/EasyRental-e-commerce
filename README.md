@@ -25,11 +25,14 @@ EasyRental is a modern, responsive, and user-friendly web application designed f
 
 📱 Responsive UI – Looks good on all devices
 
-📩 Contact Information – Footer with contact, GitHub & LinkedIn links
+📩 Contact Information – 
+LINKEDIN- www.linkedin.com/in/abdul-samad-khan9012
+GITHUB PROFILE - www.linkedin.com/in/abdul-samad-khan9012
+EMAIL-  abdulkhan14296@gmail.com
 
 🛠 Tech Stack
 Frontend	Backend / Functionality
-HTML5, CSS3	JavaScript
+HTML5, CSS3	JavaScript , reactjs
 Responsive CSS	DOM-based modals
 Font Awesome	Form Validations
 Bootstrap 5	Local Storage (for demo)
