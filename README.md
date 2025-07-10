@@ -3,7 +3,7 @@
 EasyRental is a modern, responsive, and user-friendly web application designed for renting and selling properties. It enables users to sign up, list their properties, explore elegant house designs, and book properties using interactive maps.
 
 🌐  Demo/working 
-🚀
+🚀  https://itssamad8218.github.io/EasyRental-e-commerce
 📌 
 
 📸 Preview
